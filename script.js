@@ -133,20 +133,19 @@ function iniciarSesion() {
   );
 
   if (usuarioExistente === false) {
-    do {
-      alert("Nombre de usuario invalido. Intentos restantes " + (3 - i));
+    while (usuarioExistente === false && i < 3) {
       i++;
+      alert("Nombre de usuario invalido. Intentos restantes " + (3 - i));
+      if (i === 3) {
+        alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
+        redirigirAlMenu();
+  
+        return;
+      }
       nombre = prompt("Ingrese su nombre de usuario correctamente");
       usuarioExistente = usuariosGuardados.some(
         (usuario) => usuario.nombre === nombre
       );
-    } while (usuarioExistente === false && i < 3);
-
-    if (i === 3) {
-      alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
-      redirigirAlMenu();
-
-      return;
     }
   }
 
@@ -158,17 +157,17 @@ function iniciarSesion() {
   contrasena = prompt("Ingrese su contraseña");
 
   if (usuario.contrasena !== contrasena) {
-    do {
-      alert("Contraseña invalida. Intentos restantes " + (3 - i));
+    
+    while (usuario.contrasena !== contrasena && i < 3) {
       i++;
+      alert("Contraseña invalida. Intentos restantes " + (3 - i));
+      if (i === 3) {
+        alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
+        redirigirAlMenu();
+  
+        return;
+      }
       contrasena = prompt("Ingrese su contraseña correctamente");
-    } while (usuario.contrasena !== contrasena && i < 3);
-
-    if (i === 3) {
-      alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
-      redirigirAlMenu();
-
-      return;
     }
   }
 
