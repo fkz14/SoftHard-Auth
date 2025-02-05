@@ -112,7 +112,7 @@ function crearCuenta() {
 // 4- Si se verifica correctamente inicia sesion.
 function iniciarSesion() {
   let nombre, contrasena, almacenUsuarios, usuarioExistente;
-  let i = 0;
+  
 
   const usuariosGuardados =
     JSON.parse(sessionStorage.getItem("usuarios")) || [];
@@ -125,6 +125,7 @@ function iniciarSesion() {
     return;
   }
 
+  let i = 0;
   nombre = prompt("Ingrese su nombre de usuario");
 
   usuarioExistente = usuariosGuardados.some(
@@ -133,8 +134,8 @@ function iniciarSesion() {
 
   if (usuarioExistente === false) {
     do {
-      i++;
       alert("Nombre de usuario invalido. Intentos restantes " + (3 - i));
+      i++;
       nombre = prompt("Ingrese su nombre de usuario correctamente");
       usuarioExistente = usuariosGuardados.some(
         (usuario) => usuario.nombre === nombre
@@ -153,12 +154,13 @@ function iniciarSesion() {
     (usuario) => usuario.nombre === nombre
   );
 
+  i = 0;
   contrasena = prompt("Ingrese su contraseña");
 
   if (usuario.contrasena !== contrasena) {
     do {
-      i++;
       alert("Contraseña invalida. Intentos restantes " + (3 - i));
+      i++;
       contrasena = prompt("Ingrese su contraseña correctamente");
     } while (usuario.contrasena !== contrasena && i < 3);
 
