@@ -2,25 +2,21 @@
 // Funcion encargada de manejar el menu de opciones.
 // 1- El usuario solo podra ingresar las opciones precreadas.
 function menuOpciones() {
-  let opcion = parseInt(
-    prompt(
-      "BIENVENIDO A SOFTHARD \n 1 - Iniciar sesion \n 2 - Crear una cuenta "
-    )
-  );
-
-  if (opcion !== 1 && opcion !== 2) {
-    while (opcion !== 1 && opcion !== 2) {
+  let opcion;
+  do {
+    opcion = parseInt(prompt("BIENVENIDO A SOFTHARD \n 1 - Iniciar sesion \n 2 - Crear una cuenta "));
+    
+    if (![1,2].includes(opcion)) {
       alert("Opcion invalida, introduzca una opcion valida (1,2)");
-      opcion = parseInt(prompt("1 - Iniciar sesion \n2 - Crear una cuenta "));
     }
-  }
+  } while(![1,2].includes(opcion))
 
   return opcion;
 }
 
 // Funcion encargada de manejar el redireccionamiento al menu.
 // 1- Logica simple que dependiendo del numero ingresado de las opciones prehechas ejecuta una funcion u otra. 
-function redirigirAlMenu() {
+function mostrarMenuOpciones() {
   let opcion = menuOpciones();
 
   if (opcion === 1) {
@@ -30,79 +26,86 @@ function redirigirAlMenu() {
   }
 }
 
-// Funcion encargada de manejar la validacion de los nombres a crear.
-// 1- El usuario debera ajustarse a los requisitos de la validacion.
-// 2- El nombre no puede estar vacio o ser el mismo existir.
-function validadorNombre(nombre) {
-  if (!nombre || nombre.trim() === "") {
-    alert("El nombre de usuario no puede estar vacio");
-    return false;
-  }
+// Función que valida el nombre de usuario y la contraseña.
+// 1- Para el nombre: debe tener más de 4 caracteres, no ser solo números, y no estar registrado.
+// 2- Para la contraseña: debe tener más de 6 caracteres.
+// 3- Si algo es inválido, muestra un mensaje de error y retorna false.
+function validadorNombreContraseña(tipo,valor) {
+  if(tipo === "nombre") {
 
-  const usuariosGuardados =
-    JSON.parse(sessionStorage.getItem("usuarios")) || [];
+    if (!valor || valor.length < 4 || /^\d+$/.test(valor)) {
+      alert("El nombre de usuario no puede estar vacío, debe contener más de 4 caracteres y no solo números.");
+      return false;
+    }
 
-  const nombreExistente = usuariosGuardados.some(
-    (usuario) => usuario.nombre === nombre
-  );
+    const usuariosGuardados = JSON.parse(sessionStorage.getItem("usuarios")) || [];
+    const nombreExistente = usuariosGuardados.some((usuario) => usuario.nombre === valor);
 
-  if (nombreExistente) {
-    alert("El nombre de usuario ya esta registrado. Por favor, elige otro.");
-    return false;
-  }
+    if(nombreExistente){
+      alert("El nombre de usuario ya esta registrado. Por favor, elige otro.");
+      return false;
+    }
 
-  return true;
-}
-
-// Funcion encargada de manejar la validacion de las contraseñas a crear
-// 1- La contraseña no debe estar vacia ni mucho menos con menos de 4 digitos.
-function validadorContrasena(contrasena) {
-  if ((!contrasena || contrasena.trim() === "") && contrasena.length < 4) {
-    alert(
-      "La contraseña no puede estar vacia y debe tener mas de 4 caracteres"
-    );
-    return false;
-  } else if (contrasena.length < 4) {
-    alert("La contraseña debe tener mas de 4 caracteres");
-    return false;
+  } else if(tipo === "contrasena") {
+    if(!valor || valor.length < 6) {
+      alert("La contraseña no puede estar vacia y debe tener mas de 6 caracteres.");
+      return false;
+    }
   }
   return true;
 }
 
 // Funcion encargada de manejar la creacion de cuentas
 // 1- Se pide nombre y contraseña.
-// 2- Se valida con las funciones anteriores el nombre y contraseña del usuario.
+// 2- Se valida con la funcion anterior el nombre y contraseña del usuario.
 // 3- Si el usuario cumple con los requisitos establecidos sus datos son guardados mediante sessionStorage.
 // 4- Luego de guardar los datos la cuenta es creada exitosamente y se redirecciona al menu.
 function crearCuenta() {
   let nombre, contrasena;
 
   nombre = prompt("Ingrese un nombre de usuario a crear");
-
-  while (validadorNombre(nombre) === false) {
+  while (!validadorNombreContraseña("nombre", nombre)) {
     nombre = prompt("Ingrese un nombre de usuario valido para crear");
   }
-
   alert("Nombre creado con exito");
 
   contrasena = prompt("Ingrese su contraseña a crear");
-
-  while (validadorContrasena(contrasena) === false) {
+  while (!validadorNombreContraseña("contrasena", contrasena)) {
     contrasena = prompt("Ingrese una contraseña de usuario valido para crear");
   }
   alert("Contraseña creada con exito");
 
-  const nuevoUsuario = { nombre: nombre, contrasena: contrasena };
-
-  const usuariosGuardados =
-    JSON.parse(sessionStorage.getItem("usuarios")) || [];
+  const nuevoUsuario = { nombre, contrasena };
+  const usuariosGuardados = JSON.parse(sessionStorage.getItem("usuarios")) || [];
 
   usuariosGuardados.push(nuevoUsuario);
-
   sessionStorage.setItem("usuarios", JSON.stringify(usuariosGuardados));
 
   alert("Cuenta creada con exito! Redireccionando al menu de opciones.");
-  redirigirAlMenu();
+  mostrarMenuOpciones();
+}
+
+// Función que maneja los intentos de login.
+// 1- Solicita al usuario un valor (nombre o contraseña) usando un prompt.
+// 2- Si el valor es inválido, muestra un mensaje y permite hasta 3 intentos.
+// 3- Si los intentos se agotan, redirige al menú de opciones.
+// 4- Si el valor es válido, lo retorna.
+function intentarLogin(funcion, mensaje, maxIntentos = 3){
+  let i = 0;
+  let valor = prompt(mensaje);
+
+  while(!funcion(valor) && i < maxIntentos) {
+    i++;
+    alert(`Intento invalido. Intentos restantes: ${maxIntentos - i}`);
+    if(i === maxIntentos){
+      alert("Agotaste los intentos. Intentalo de nuevo mas tarde.");
+      mostrarMenuOpciones();
+      return null;
+    }
+    valor = prompt(mensaje);
+  }
+
+  return valor;
 }
 
 // Funcion encargada de manejar el inicio de menu
@@ -111,65 +114,22 @@ function crearCuenta() {
 // 3- Se solicita la contraseña si coincide avanza, si no, se le dara 3 intentos y se le redireccionara al menu.
 // 4- Si se verifica correctamente inicia sesion.
 function iniciarSesion() {
-  let nombre, contrasena, almacenUsuarios, usuarioExistente;
-  
+  const usuariosGuardados = JSON.parse(sessionStorage.getItem("usuarios")) || [];
 
-  const usuariosGuardados =
-    JSON.parse(sessionStorage.getItem("usuarios")) || [];
-
-  almacenUsuarios = usuariosGuardados.length;
-
-  if (almacenUsuarios === 0) {
+  if(usuariosGuardados.length === 0) {
     alert("No hay usuarios registrados, crea una cuenta.");
     crearCuenta();
     return;
   }
 
-  let i = 0;
-  nombre = prompt("Ingrese su nombre de usuario");
+  let nombre = intentarLogin((valor) => usuariosGuardados.some((usuario) => usuario.nombre === valor), "Ingrese su nombre de usuario");
 
-  usuarioExistente = usuariosGuardados.some(
-    (usuario) => usuario.nombre === nombre
-  );
+  if (nombre === null) return;
 
-  if (usuarioExistente === false) {
-    while (usuarioExistente === false && i < 3) {
-      i++;
-      alert("Nombre de usuario invalido. Intentos restantes " + (3 - i));
-      if (i === 3) {
-        alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
-        redirigirAlMenu();
-  
-        return;
-      }
-      nombre = prompt("Ingrese su nombre de usuario correctamente");
-      usuarioExistente = usuariosGuardados.some(
-        (usuario) => usuario.nombre === nombre
-      );
-    }
-  }
+  const usuario = usuariosGuardados.find((usuario) => usuario.nombre === nombre);
 
-  const usuario = usuariosGuardados.find(
-    (usuario) => usuario.nombre === nombre
-  );
-
-  i = 0;
-  contrasena = prompt("Ingrese su contraseña");
-
-  if (usuario.contrasena !== contrasena) {
-    
-    while (usuario.contrasena !== contrasena && i < 3) {
-      i++;
-      alert("Contraseña invalida. Intentos restantes " + (3 - i));
-      if (i === 3) {
-        alert("Agotaste los intentos... Intentelo denuevo mas tarde.");
-        redirigirAlMenu();
-  
-        return;
-      }
-      contrasena = prompt("Ingrese su contraseña correctamente");
-    }
-  }
+  let contrasena = intentarLogin((valor) => usuario.contrasena === valor, "Ingrese su contraseña");
+  if (contrasena === null) return;
 
   alert(`Bienvenido ${nombre}!!`);
 }
@@ -178,10 +138,4 @@ function iniciarSesion() {
 // 1- Dependiendo de la opcion que retorne la funcion de menuOpciones avanza hacia una opcion.
 // 2- Si es 1 ejecuta iniciarSesion();
 // 3- Si es 2 ejecuta crearCuenta();
-let opcion = menuOpciones();
-
-if (opcion === 1) {
-  iniciarSesion();
-} else if (opcion === 2) {
-  crearCuenta();
-}
+mostrarMenuOpciones()
