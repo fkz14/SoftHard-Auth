@@ -4,15 +4,17 @@
 function menuOpciones() {
   let opcion;
   do {
-    opcion = parseInt(prompt("BIENVENIDO A SOFTHARD \n 1 - Iniciar sesion \n 2 - Crear una cuenta "));
+    opcion = prompt("BIENVENIDO A SOFTHARD \n 1 - Iniciar sesion \n 2 - Crear una cuenta ");
     
-    if (![1,2].includes(opcion)) {
-      alert("Opcion invalida, introduzca una opcion valida (1,2)");
+    // Verifica que la opción sea un número entero y que sea 1 o 2
+    if (!/^[1-2]$/.test(opcion)) {
+      alert("Opción inválida, ingrese solo 1 o 2.");
     }
-  } while(![1,2].includes(opcion))
+  } while (!/^[1-2]$/.test(opcion));  // Regresa si la opción no es 1 ni 2 o tiene caracteres extraños
 
-  return opcion;
+  return parseInt(opcion);  // Aseguramos que el valor retornado sea un número entero
 }
+
 
 // Funcion encargada de manejar el redireccionamiento al menu.
 // 1- Logica simple que dependiendo del numero ingresado de las opciones prehechas ejecuta una funcion u otra. 
@@ -48,7 +50,7 @@ function validadorNombreContraseña(tipo,valor) {
 
   } else if(tipo === "contrasena") {
     if(!valor || valor.length < 6) {
-      alert("La contraseña no puede estar vacia y debe tener mas de 6 caracteres.");
+      alert("La contraseña no puede estar vacia y debe tener 6 o mas caracteres.");
       return false;
     }
   }
@@ -96,12 +98,18 @@ function intentarLogin(funcion, mensaje, maxIntentos = 3){
 
   while(!funcion(valor) && i < maxIntentos) {
     i++;
-    alert(`Intento invalido. Intentos restantes: ${maxIntentos - i}`);
+    
+    // Mostrar los intentos restantes solo si no es 0
+    if (i < maxIntentos) {
+      alert(`Intento invalido. Intentos restantes: ${maxIntentos - i}`);
+    }
+
     if(i === maxIntentos){
-      alert("Agotaste los intentos. Intentalo de nuevo mas tarde.");
+      alert("Agotaste los intentos. Intentalo de nuevo más tarde.");
       mostrarMenuOpciones();
       return null;
     }
+
     valor = prompt(mensaje);
   }
 
