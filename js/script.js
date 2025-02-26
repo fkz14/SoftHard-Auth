@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Redirige a la pagina de login despues de un breve mensaje de exito
             setTimeout(() => {
-                window.location.href = "index.html"; // Redirige a la pagina de login
+                window.location.href = "/index.html"; // Redirige a la pagina de login
             }, 2000);
         });
     }
