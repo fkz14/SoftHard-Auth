@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.removeItem("usuarioActivo");
 
             // Redirigimos al usuario al login
-            window.location.href = "./index.html";
+            window.location.href = "../index.html";
         });
     } else {
         // Si no hay un usuario activo, redirigimos al login
-        window.location.href = "./index.html";
+        window.location.href = "../index.html";
     }
 });
