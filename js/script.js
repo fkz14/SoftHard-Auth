@@ -90,18 +90,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem("usuarioActivo", usuario);
                 mensaje.textContent = `Bienvenido, ${usuario}! Redireccionando...`; 
                 mensaje.style.color = "green";
+                // Redirige a la pagina de login despues de un breve mensaje de exito
+                setTimeout(() => {
+                    window.location.href = "html/bienvenido.html"; // Redirige a la pagina de login
+                }, 2000);
             } else {
                 mensaje.textContent = "Usuario o contraseña incorrectos.";
                 mensaje.style.color = "red";
             }
 
+            // Limpiar campos después de intento
+            document.getElementById("usuario").value = "";
+            document.getElementById("contrasena").value = "";
+
             // Agregamos el mensaje al formulario para que el usuario lo vea.
             loginForm.appendChild(mensaje);
 
-            // Redirige a la pagina de login despues de un breve mensaje de exito
-            setTimeout(() => {
-                window.location.href = "html/bienvenido.html"; // Redirige a la pagina de login
-            }, 2000);
+            
         })
     }
 
@@ -163,6 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
             // Mensaje de exito
             mensaje.textContent = "¡Registro exitoso! Ahora puedes iniciar sesion. Redireccionando...";
             mensaje.style.color = "green"; // Mensaje en color verde
+
+            document.getElementById("nuevoUsuario").value = "";
+            document.getElementById("nuevaContrasena").value = "";
 
             // Añade el mensaje al formulario de registro para que el usuario lo vea
             registroForm.appendChild(mensaje);
