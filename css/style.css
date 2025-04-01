@@ -80,14 +80,100 @@ a:hover {
 }
 
 /* Estilos para la página de bienvenida */
-#recuadroBienvenida {
-    background-color: #28a745; /* Verde */
-    color: white;
-    padding: 30px;
+.bienvenida-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.recuadro-bienvenida {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.recuadro-bienvenida::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4a90e2, #67b26f);
+}
+
+.bienvenida-header {
+    margin-bottom: 30px;
+}
+
+.bienvenida-header h2 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.bienvenida-content {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
     border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bienvenida-content p {
+    margin: 10px 0;
+    color: #6c757d;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.bienvenida-footer {
+    margin-top: 30px;
+}
+
+.btn-cerrar-sesion {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5253 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(238, 82, 83, 0.2);
+}
+
+.btn-cerrar-sesion:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(238, 82, 83, 0.3);
+    background: linear-gradient(135deg, #ee5253 0%, #ff6b6b 100%);
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+/* Ajustes para el reloj en la página de bienvenida */
+.bienvenida-container .reloj {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 #cerrarSesionBtn {

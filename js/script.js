@@ -51,7 +51,20 @@ function validadorUsuarioContrasena(tipo, valor) {
 
 // Espera a que el contenido del DOM se cargue completamente antes de ejecutar el codigo.
 document.addEventListener("DOMContentLoaded", () => {
-
+    // Configurar el reloj
+    const reloj = document.getElementById("reloj");
+    if (reloj) {
+        function actualizarReloj() {
+            const ahora = moment();
+            reloj.textContent = ahora.format('dddd, D [de] MMMM [de] YYYY, HH:mm:ss');
+        }
+        
+        // Actualizar inmediatamente
+        actualizarReloj();
+        
+        // Actualizar cada segundo
+        setInterval(actualizarReloj, 1000);
+    }
 
     // Cargar usuarios desde el archivo JSON (esto siempre se ejecutará)
     fetch("./json/usuarios.json")
@@ -112,12 +125,25 @@ document.addEventListener("DOMContentLoaded", () => {
             if (usuarioEncontrado) {
                 // Guardamos el nombre del usuario en localStorage para usarlo en la página de bienvenida
                 localStorage.setItem("usuarioActivo", usuario);
-                mensaje.textContent = `Bienvenido, ${usuario}! Redireccionando...`; 
-                mensaje.style.color = "green";
-                // Redirige a la pagina de login despues de un breve mensaje de exito
-                setTimeout(() => {
-                    window.location.href = "html/bienvenido.html"; // Redirige a la pagina de login
-                }, 2000);
+                
+                // Mostrar SweetAlert2 de éxito y redirigir después de 2 segundos
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Inicio de Sesión Exitoso!",
+                    text: `Bienvenido, ${usuario}`,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    position: 'center',
+                    backdrop: 'rgba(0,0,0,0.4)',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                }).then(() => {
+                    window.location.href = "html/bienvenido.html"; // Redirige a la página de bienvenida
+                });
             } else {
                 mensaje.textContent = "Usuario o contraseña incorrectos.";
                 mensaje.style.color = "red";

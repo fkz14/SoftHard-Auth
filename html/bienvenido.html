@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
-    <!-- Enlace al archivo CSS -->
+    <title>Bienvenido - SOFTHARD</title>
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/es.js"></script>
 </head>
 <body>
-    <div id="recuadroBienvenida">
-        <h2 id="bienvenidoMensaje"></h2>
-        <button id="cerrarSesionBtn">Cerrar sesión</button>
-    </div>
+    <header>
+        <h1>SOFTHARD</h1>
+    </header>
 
-    <!-- Enlace al archivo JS -->
+    <main class="bienvenida-container">
+        <div id="recuadroBienvenida" class="recuadro-bienvenida">
+            <div class="bienvenida-header">
+                <h2 id="bienvenidoMensaje"></h2>
+            </div>
+            <div class="bienvenida-content">
+                <p class="fecha-actual"></p>
+                <p class="hora-actual"></p>
+            </div>
+            <div class="bienvenida-footer">
+                <button id="cerrarSesionBtn" class="btn-cerrar-sesion">
+                    <span class="btn-icon">🚪</span>
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </main>
+
     <script src="../js/bienvenido.js"></script>
 </body>
 </html>
