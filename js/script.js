@@ -52,7 +52,31 @@ function validadorUsuarioContrasena(tipo, valor) {
 // Espera a que el contenido del DOM se cargue completamente antes de ejecutar el codigo.
 document.addEventListener("DOMContentLoaded", () => {
 
-    
+
+    // Cargar usuarios desde el archivo JSON (esto siempre se ejecutará)
+    fetch("./json/usuarios.json")
+    .then(response => response.json())
+    .then(data => {
+        // Recupera los usuarios guardados en localStorage
+        const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        // Iteramos sobre los usuarios del JSON
+        data.forEach(usuarioJSON => {
+            // Comprobamos si el usuario ya existe en localStorage
+            const usuarioExistente = usuariosGuardados.find(usuario => usuario.nombre === usuarioJSON.nombre);
+
+            // Si el usuario no existe, lo agregamos a localStorage
+            if (!usuarioExistente) {
+                usuariosGuardados.push(usuarioJSON); // Añadir el usuario desde JSON
+            }
+        });
+
+        // Guardar el array de usuarios actualizado en localStorage
+        localStorage.setItem("usuarios", JSON.stringify(usuariosGuardados));
+    })
+    .catch(error => console.error('Error al cargar el archivo JSON:', error));
+
+
     // Seleccionamos el formulario del login por su ID
     const loginForm = document.getElementById("loginForm");
 
@@ -69,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Recuperamos los usuarios guardados en localStorge y los convertimos de JSON a un array de objetos
             // Si no hay usuarios guardados, asignamos un array vacio como valor predeterminado.
-            const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios")) || [];
+            usuariosGuardados = JSON.parse(localStorage.getItem("usuarios")) || [];
 
             // Buscamos un usuario en el que array que coincida con el nombre y la contraseña ingresados.
             const usuarioEncontrado = usuariosGuardados.find(user => user.nombre === usuario && user.contrasena === contrasena);
@@ -151,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Obtiene los usuarios guardados en localStorage o un array vacio si no hay datos
-            const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios")) || [];
+            usuariosGuardados = JSON.parse(localStorage.getItem("usuarios")) || [];
 
             // Si el usuario no existe, lo creamos y lo guardamos en el localStorage
             const nuevoUsuarioObj = {
@@ -165,20 +189,27 @@ document.addEventListener("DOMContentLoaded", () => {
             // Guarda el array de usuarios actualizado en el localStorage
             localStorage.setItem("usuarios", JSON.stringify(usuariosGuardados));
 
-            // Mensaje de exito
-            mensaje.textContent = "¡Registro exitoso! Ahora puedes iniciar sesion. Redireccionando...";
-            mensaje.style.color = "green"; // Mensaje en color verde
-
             document.getElementById("nuevoUsuario").value = "";
             document.getElementById("nuevaContrasena").value = "";
 
-            // Añade el mensaje al formulario de registro para que el usuario lo vea
-            registroForm.appendChild(mensaje);
-
-            // Redirige a la pagina de login despues de un breve mensaje de exito
-            setTimeout(() => {
-                window.location.href = "../index.html"; // Redirige a la pagina de login
-            }, 2000);
+            // Mostrar SweetAlert2 de éxito y redirigir después de 2 segundos
+            Swal.fire({
+                icon: "success",
+                title: "¡Registro Exitoso!",
+                text: "Tu cuenta ha sido creada correctamente.",
+                showConfirmButton: false,
+                timer: 2000,
+                position: 'center',
+                backdrop: 'rgba(0,0,0,0.4)',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            }).then(() => {
+                window.location.href = "../index.html"; // Redirige al login
+            });
         });
     }
 
