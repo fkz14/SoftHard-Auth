@@ -1,6 +1,6 @@
 # SoftHard - Sistema de Autenticación 🔐
 
-**SoftHard** es un sistema de autenticación **seguro y elegante** que permite a los usuarios **registrarse e iniciar sesión de forma confiable**. El proyecto implementa **buenas prácticas de seguridad** y proporciona una experiencia de usuario **moderna y profesional**.
+**SoftHard** es un sistema de autenticación **elegante** que permite a los usuarios **registrarse e iniciar sesión de forma confiable**. El proyecto implementa **buenas prácticas** y proporciona una experiencia de usuario **moderna y profesional**.
 
 Puedes ver el proyecto en acción en **[SoftHard Auth](https://fkz14.github.io/Softhard-Login/)**.
 
